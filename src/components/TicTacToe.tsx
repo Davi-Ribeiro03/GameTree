@@ -1,57 +1,35 @@
 import { useState } from "react";
+import { BoardPropType } from "../types/GameProps.type";
+import { checkWinner } from "../utils/checkWinner";
 
-export const TicTacToe: React.FC = () => {
-  const [board, setBoard] = useState<string[][]>([
-    [' ', ' ', ' '],
-    [' ', ' ', ' '],
-    [' ', ' ', ' ']
-  ]);
-  const [currentPlayer, setCurrentPlayer] = useState<'X' | 'O'>('X');
-  const [gameStatus, setGameStatus] = useState<string>('In Progress');
-
-  const checkWinner = (board: string[][]): 'X' | 'O' | 'Draw' | null => {
-    const lines = [
-      ...board,
-      [board[0][0], board[1][0], board[2][0]],
-      [board[0][1], board[1][1], board[2][1]],
-      [board[0][2], board[1][2], board[2][2]],
-      [board[0][0], board[1][1], board[2][2]],
-      [board[0][2], board[1][1], board[2][0]],
-    ];
-
-    const checkWin = (player: string) => lines.some(line => line.every(cell => cell === player));
-
-    if (checkWin('X')) return 'X';
-    if (checkWin('O')) return 'O';
-
-    if (board.flat().every(cell => cell !== ' ')) return 'Draw';
-
-    return null;
-  };
+export const TicTacToe = ({ board, setBoard, setTree }: BoardPropType) => {
+  const [currentPlayer, setCurrentPlayer] = useState<"X" | "O">("X");
+  const [gameStatus, setGameStatus] = useState<string>("In Progress");
 
   const handleClick = (row: number, col: number) => {
-    if (board[row][col] === ' ' && gameStatus === 'In Progress') {
-      const newBoard = board.map(r => r.slice());
+    if (board[row][col] === " " && gameStatus === "In Progress") {
+      const newBoard = board.map((r) => r.slice());
       newBoard[row][col] = currentPlayer;
       setBoard(newBoard);
 
       const winner = checkWinner(newBoard);
       if (winner) {
-        setGameStatus(winner === 'Draw' ? 'Draw' : `${winner} Wins!`);
+        setGameStatus(winner === "Draw" ? "Draw" : `${winner} Wins!`);
       } else {
-        setCurrentPlayer(currentPlayer === 'X' ? 'O' : 'X');
+        setCurrentPlayer(currentPlayer === "X" ? "O" : "X");
       }
     }
   };
 
   const resetGame = () => {
     setBoard([
-      [' ', ' ', ' '],
-      [' ', ' ', ' '],
-      [' ', ' ', ' ']
+      [" ", " ", " "],
+      [" ", " ", " "],
+      [" ", " ", " "],
     ]);
-    setCurrentPlayer('X');
-    setGameStatus('In Progress');
+    setTree(null);
+    setCurrentPlayer("X");
+    setGameStatus("In Progress");
   };
 
   return (
@@ -62,16 +40,25 @@ export const TicTacToe: React.FC = () => {
           <button
             key={index}
             onClick={() => handleClick(Math.floor(index / 3), index % 3)}
-            className={`w-20 h-20 text-4xl border-4 rounded-lg flex items-center justify-center ${cell === 'X' ? 'text-red-500' : cell === 'O' ? 'text-blue-500' : 'text-gray-400'
-              } bg-gray-800 border-gray-700 hover:bg-gray-700 transition-colors duration-200`}
+            className={`w-20 h-20 text-4xl border-4 rounded-lg flex items-center justify-center ${
+              cell === "X"
+                ? "text-red-500"
+                : cell === "O"
+                ? "text-blue-500"
+                : "text-gray-400"
+            } bg-gray-800 border-gray-700 hover:bg-gray-700 transition-colors duration-200`}
           >
             {cell}
           </button>
         ))}
       </div>
       <div className="text-lg mb-6">
-        <div><strong>Current Player:</strong> {currentPlayer}</div>
-        <div><strong>Status:</strong> {gameStatus}</div>
+        <div>
+          <strong>Current Player:</strong> {currentPlayer}
+        </div>
+        <div>
+          <strong>Status:</strong> {gameStatus}
+        </div>
       </div>
       <button
         onClick={resetGame}
