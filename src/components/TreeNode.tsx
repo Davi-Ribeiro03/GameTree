@@ -1,9 +1,4 @@
-interface TreeNodeProps {
-  board: string[][];
-  type: "+" | "-";
-  children?: TreeNodeProps[];
-  score?: number;
-}
+import { TreeNodeProps } from "../types/TreeNodeProps.type";
 
 export const TreeNode: React.FC<TreeNodeProps> = ({
   board,
@@ -12,7 +7,10 @@ export const TreeNode: React.FC<TreeNodeProps> = ({
   score,
 }) => {
   return (
-    <div className="m-2 p-4 border border-gray-700 rounded-lg bg-gray-900 shadow-md text-white">
+    <div
+      id="treeNode"
+      className="m-2 p-4 border border-gray-700 rounded-lg bg-gray-900 shadow-md text-white"
+    >
       <div className="mb-4">
         <div className="text-lg font-bold">
           <strong>Type:</strong> {type}

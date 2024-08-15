@@ -1,9 +1,14 @@
 import { useState } from "react";
-import { BoardPropType } from "../types/GameProps.type";
+import { GameProps } from "../types/GameProps.type";
 import { checkWinner } from "../utils/checkWinner";
 
-export const TicTacToe = ({ board, setBoard, setTree }: BoardPropType) => {
-  const [currentPlayer, setCurrentPlayer] = useState<"X" | "O">("X");
+export const TicTacToe = ({
+  board,
+  setBoard,
+  setTree,
+  currentPlayer,
+  setCurrentPlayer,
+}: GameProps) => {
   const [gameStatus, setGameStatus] = useState<string>("In Progress");
 
   const handleClick = (row: number, col: number) => {
@@ -16,7 +21,7 @@ export const TicTacToe = ({ board, setBoard, setTree }: BoardPropType) => {
       if (winner) {
         setGameStatus(winner === "Draw" ? "Draw" : `${winner} Wins!`);
       } else {
-        setCurrentPlayer(currentPlayer === "X" ? "O" : "X");
+        setCurrentPlayer!(currentPlayer === "X" ? "O" : "X");
       }
     }
   };
@@ -28,7 +33,7 @@ export const TicTacToe = ({ board, setBoard, setTree }: BoardPropType) => {
       [" ", " ", " "],
     ]);
     setTree(null);
-    setCurrentPlayer("X");
+    setCurrentPlayer!("X");
     setGameStatus("In Progress");
   };
 
@@ -52,7 +57,7 @@ export const TicTacToe = ({ board, setBoard, setTree }: BoardPropType) => {
           </button>
         ))}
       </div>
-      <div className="text-lg mb-6">
+      <div className="text-lg mb-1">
         <div>
           <strong>Current Player:</strong> {currentPlayer}
         </div>
