@@ -45,19 +45,18 @@ export const TicTacToe = ({
           <button
             key={index}
             onClick={() => handleClick(Math.floor(index / 3), index % 3)}
-            className={`w-20 h-20 text-4xl border-4 rounded-lg flex items-center justify-center ${
-              cell === "X"
-                ? "text-red-500"
-                : cell === "O"
+            className={`w-20 h-20 text-4xl border-4 rounded-lg flex items-center justify-center ${cell === "X"
+              ? "text-red-500"
+              : cell === "O"
                 ? "text-blue-500"
                 : "text-gray-400"
-            } bg-gray-800 border-gray-700 hover:bg-gray-700 transition-colors duration-200`}
+              } bg-gray-800 border-gray-700 hover:bg-gray-700 transition-colors duration-200`}
           >
             {cell}
           </button>
         ))}
       </div>
-      <div className="text-lg mb-1">
+      <div className="text-lg mb-6">
         <div>
           <strong>Current Player:</strong> {currentPlayer}
         </div>

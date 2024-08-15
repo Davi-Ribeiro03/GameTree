@@ -10,52 +10,73 @@ export const GameTree = ({
   setTree,
   currentPlayer,
 }: GameProps) => {
+  const [isLoadingGenerateTree, setIsLoadingGenerateTree] = useState(false);
+  const [isLoadingGenerateBestTree, setIsLoadingGenerateBestTree] = useState(false);
   const [depth, setDepth] = useState(3);
-  const handleGenerateTree = () => {
-    const tree = buildTree(board, depth - 1, currentPlayer === "X" ? "+" : "-");
 
-    setTree(tree);
+  const handleGenerateTree = async () => {
+    setIsLoadingGenerateTree(true);
+    try {
+      setTimeout(async () => {
+        const generatedTree = await buildTree(board, depth - 1, currentPlayer === "X" ? "+" : "-");
+        setTree(generatedTree);
+        setIsLoadingGenerateTree(false);
+      }, 2000);
+    } catch (error) {
+      console.error(error);
+      setIsLoadingGenerateTree(false);
+    }
   };
 
-  const handleGenerateBestBranch = () => {
-    const tree = buildTree(board, depth - 1, currentPlayer === "X" ? "+" : "-");
-
-    const treeUpdated = bestGame(tree);
-
-    setTree(treeUpdated);
+  const handleGenerateBestBranch = async () => {
+    setIsLoadingGenerateBestTree(true);
+    try {
+      setTimeout(() => {
+        const generatedTree = buildTree(board, depth - 1, currentPlayer === "X" ? "+" : "-");
+        const treeUpdated = bestGame(generatedTree);
+        setTree(treeUpdated);
+        setIsLoadingGenerateBestTree(false);
+      }, 2000);
+    } catch (error) {
+      console.error(error);
+      setIsLoadingGenerateBestTree(false);
+    }
   };
+
   return (
     <div className="mt-6">
       <input
         type="text"
-        placeholder="Digite a profundidade"
+        placeholder="Enter depth"
         className="mb-2 p-2 rounded-lg bg-gray-800 placeholder:text-center text-white outline-none text-center "
-        name="digite"
         onChange={(e) => setDepth(parseInt(e.target.value))}
       />
 
-      <div className="flex gap-2 justify-center ">
+      <div className="flex gap-2 justify-center">
         <a href="#treeNode">
           <button
-            onClick={() => {
-              handleGenerateTree();
-            }}
+            onClick={handleGenerateTree}
             className="mb-4 px-4 py-2 text-lg bg-blue-500 text-white rounded hover:bg-blue-600"
+            disabled={isLoadingGenerateTree}
           >
-            Generate Game Tree
+            {isLoadingGenerateTree ? "Generating..." : "Generate Game Tree"}
           </button>
         </a>
         <a href="#treeNode">
           <button
             onClick={handleGenerateBestBranch}
             className="mb-4 px-4 py-2 text-lg bg-blue-500 text-white rounded hover:bg-blue-600"
+            disabled={isLoadingGenerateBestTree}
           >
-            Generate Best branch
+            {isLoadingGenerateBestTree ? "Generating..." : "Generate Best Branch"}
           </button>
         </a>
       </div>
+
       <div>
-        {tree ? (
+        {isLoadingGenerateTree || isLoadingGenerateBestTree ? (
+          <p className="text-white">Loading...</p>
+        ) : tree ? (
           <TreeNode {...tree} />
         ) : (
           <p className="text-white">

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { GameTree } from "./components/GameTree";
 import { TicTacToe } from "./components/TicTacToe";
 import { TreeNodeProps } from "./types/TreeNodeProps.type";
